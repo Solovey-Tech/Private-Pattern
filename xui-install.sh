@@ -2,6 +2,10 @@
 
 # Создаем папку в корневом каталоге
 echo "Создание папки /vpnserver-xui..."
+if [ -d "/vpnserver-xui" ]; then
+    echo "Папка /vpnserver-xui уже существует. Удаляем её..."
+    rm -rf /vpnserver-xui
+fi
 mkdir /vpnserver-xui
 
 # Переходим в созданную папку

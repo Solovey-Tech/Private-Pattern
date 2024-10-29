@@ -82,10 +82,13 @@ if [ -d "/root/qrcodeserver" ]; then
     sudo mv /root/qrcodeserver /
 fi
 
-# Устанавливаем python3-pip и mc
+# Устанавливаем python3-pip и mc bmon  и  netperf
 echo "Установка python3-pip и mc..."
 sudo apt-get update
 sudo apt-get install -y python3-pip mc
+sudo apt-get install -y bmon
+sudo apt-get install -y netperf
+
 
 # Запускаем vpn_installer.py
 echo "Запуск vpn_installer.py..."

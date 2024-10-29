@@ -24,6 +24,9 @@ else
     exit 1
 fi
 
+
+sudo apt-get install -y python3-pip
+
 # Запускаем vpn_installer.py
 echo "Запуск vpn_installer.py..."
 python3 vpn_installer.py

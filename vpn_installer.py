@@ -33,6 +33,17 @@ def install_3x_ui():
     except subprocess.CalledProcessError as e:
         print(f"Ошибка при установке 3x-ui: {e}")
 
+def install_pip3():
+    """Устанавливаем pip3, если он не установлен."""
+    try:
+        subprocess.run(['pip3', '--version'], check=True)
+        print("pip3 уже установлен.")
+    except FileNotFoundError:
+        print("Установка pip3...")
+        subprocess.run(['sudo', 'apt-get', 'update'], check=True)
+        subprocess.run(['sudo', 'apt-get', 'install', '-y', 'python3-pip'], check=True)
+        print("pip3 успешно установлен.")
+
 def install_required_packages():
     """Устанавливаем необходимые пакеты через apt и pip3."""
     try:
@@ -62,5 +73,6 @@ if __name__ == "__main__":
     set_hostname(hostname)
     set_password()
     update_and_upgrade()
+    install_pip3()
     install_required_packages()
     install_3x_ui()

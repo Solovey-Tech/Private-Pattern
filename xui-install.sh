@@ -88,6 +88,7 @@ sudo apt-get update
 sudo apt-get install -y python3-pip mc
 sudo apt-get install -y bmon
 sudo apt-get install -y netperf
+sudo apt-get install -y speedtest-cli
 
 
 # Запускаем vpn_installer.py

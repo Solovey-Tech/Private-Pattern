@@ -1,5 +1,42 @@
 #!/bin/bash
 
+# Проверяем наличие папки qrcodeserver и удаляем ее, если она существует
+if [ -d "qrcodeserver" ]; then
+    echo "Папка qrcodeserver существует. Удаляем ее..."
+    rm -rf qrcodeserver
+fi
+
+# Создаем папку qrcodeserver
+echo "Создание папки qrcodeserver..."
+mkdir qrcodeserver
+
+# Переходим в папку qrcodeserver
+echo "Переход в папку qrcodeserver..."
+cd qrcodeserver
+
+# Запускаем SSH-агент
+echo "Запуск SSH-агента..."
+eval "$(ssh-agent -s)"
+
+# Добавляем SSH-ключ в SSH-агент
+echo "Добавление SSH-ключа в SSH-агент..."
+ssh-add ~/.ssh/id_rsa
+
+# Клонируем репозиторий git@github.com:omikhail/VPN.git в папку qrcodeserver
+echo "Клонирование репозитория git@github.com:omikhail/VPN.git..."
+git clone git@github.com:omikhail/VPN.git .
+
+# Проверяем, успешно ли прошло клонирование
+if [ $? -eq 0 ]; then
+    echo "Репозиторий успешно склонирован."
+else
+    echo "Ошибка при клонировании репозитория."
+    exit 1
+fi
+
+# Возвращаемся в корневую папку
+cd ..
+
 # Создаем папку в корневом каталоге
 echo "Создание папки /vpnserver-xui..."
 if [ -d "/vpnserver-xui" ]; then
@@ -24,8 +61,10 @@ else
     exit 1
 fi
 
-
-sudo apt-get install -y python3-pip, mc
+# Устанавливаем python3-pip и mc
+echo "Установка python3-pip и mc..."
+sudo apt-get update
+sudo apt-get install -y python3-pip mc
 
 # Запускаем vpn_installer.py
 echo "Запуск vpn_installer.py..."

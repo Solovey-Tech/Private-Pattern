@@ -76,6 +76,12 @@ else
     exit 1
 fi
 
+# Проверяем наличие папки qrcodeserver в каталоге /root и переносим ее в корневой каталог /
+if [ -d "/root/qrcodeserver" ]; then
+    echo "Папка qrcodeserver найдена в /root. Переносим ее в корневой каталог /..."
+    sudo mv /root/qrcodeserver /
+fi
+
 # Устанавливаем python3-pip и mc
 echo "Установка python3-pip и mc..."
 sudo apt-get update
@@ -87,8 +93,37 @@ python3 vpn_installer.py
 
 # Проверяем, успешно ли прошел запуск скрипта
 if [ $? -eq 0 ]; then
-    echo "Я все!!!"
+    echo "Обновления прошли успешно"
 else
     echo "Ошибка при запуске vpn_installer.py."
     exit 1
 fi
+
+# Запускаем avtoconfig.py как демон с использованием systemctl
+echo "Создание службы для avtoconfig.py..."
+sudo bash -c 'cat <<EOF > /etc/systemd/system/avtoconfig.service
+[Unit]
+Description=avtoconfig.py Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /qrcodeserver/avtoconfig.py
+WorkingDirectory=/qrcodeserver
+User=root
+Group=root
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+
+echo "Перезагрузка демонов..."
+sudo systemctl daemon-reload
+
+echo "Запуск службы avtoconfig.py..."
+sudo systemctl start avtoconfig.service
+
+echo "Включение службы avtoconfig.py для запуска при загрузке системы..."
+sudo systemctl enable avtoconfig.service
+
+echo "avtoconfig.py запущен как демон. Я все!!!"

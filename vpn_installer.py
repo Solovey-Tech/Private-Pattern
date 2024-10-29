@@ -16,8 +16,27 @@ def set_password():
     subprocess.run(['sudo', 'chpasswd'], input=f"root:{password}", text=True)
     print("Пароль установлен.")
 
+def update_and_upgrade():
+    """Обновляем и обновляем систему."""
+    try:
+        subprocess.run(['sudo', 'apt-get', 'update'], check=True)
+        subprocess.run(['sudo', 'apt-get', 'upgrade', '-y'], check=True)
+        print("Обновления установлены")
+    except subprocess.CalledProcessError as e:
+        print(f"Ошибка при обновлении системы: {e}")
+
+def install_3x_ui():
+    """Устанавливаем 3x-ui."""
+    try:
+        subprocess.run(['bash', '<(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)'], shell=True, check=True)
+        print("Установка прошла успешно, ядро x-ui установлено, панель 3x-ui установлено")
+    except subprocess.CalledProcessError as e:
+        print(f"Ошибка при установке 3x-ui: {e}")
+
 if __name__ == "__main__":
     print("Запуск установки VPN...")
     hostname = input("Введите имя хоста для сервера: ")
     set_hostname(hostname)
     set_password()
+    update_and_upgrade()
+    install_3x_ui()

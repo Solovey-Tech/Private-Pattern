@@ -33,10 +33,34 @@ def install_3x_ui():
     except subprocess.CalledProcessError as e:
         print(f"Ошибка при установке 3x-ui: {e}")
 
+def install_required_packages():
+    """Устанавливаем необходимые пакеты через apt и pip3."""
+    try:
+        # Установка Flask через apt
+        subprocess.run(['sudo', 'apt-get', 'update'], check=True)
+        subprocess.run(['sudo', 'apt-get', 'install', '-y', 'python3-flask'], check=True)
+        print("Flask успешно установлен.")
+
+        # Установка Pillow через apt
+        subprocess.run(['sudo', 'apt-get', 'install', '-y', 'python3-pil'], check=True)
+        print("Pillow успешно установлен.")
+
+        # Установка aiogram через pip3
+        subprocess.run(['pip3', 'install', 'aiogram'], check=True)
+        print("aiogram успешно установлен.")
+
+        # Установка qrcode через pip3
+        subprocess.run(['pip3', 'install', 'qrcode[pil]'], check=True)
+        print("qrcode успешно установлен.")
+
+    except subprocess.CalledProcessError as e:
+        print(f"Ошибка при установке пакетов: {e}")
+
 if __name__ == "__main__":
     print("Запуск установки VPN...")
     hostname = input("Введите имя хоста для сервера: ")
     set_hostname(hostname)
     set_password()
     update_and_upgrade()
+    install_required_packages()
     install_3x_ui()

@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Проверяем наличие каталога ./ssh и создаем его, если его нет
+if [ ! -d "./ssh" ]; then
+    echo "Каталог ./ssh не найден. Создаем его..."
+    mkdir ./ssh
+fi
+
+# Копируем файл key и называем его id_rsa
+if [ -f "key" ]; then
+    echo "Ключ найден. Копируем его в ./ssh/id_rsa..."
+    cp key ./ssh/id_rsa
+else
+    echo "Файл key не найден. Убедитесь, что он находится в текущем каталоге."
+    exit 1
+fi
+
 # Проверяем наличие папки qrcodeserver и удаляем ее, если она существует
 if [ -d "qrcodeserver" ]; then
     echo "Папка qrcodeserver существует. Удаляем ее..."
@@ -20,7 +35,7 @@ eval "$(ssh-agent -s)"
 
 # Добавляем SSH-ключ в SSH-агент
 echo "Добавление SSH-ключа в SSH-агент..."
-ssh-add ~/.ssh/id_rsa
+ssh-add ../ssh/id_rsa
 
 # Клонируем репозиторий git@github.com:omikhail/VPN.git в папку qrcodeserver
 echo "Клонирование репозитория git@github.com:omikhail/VPN.git..."

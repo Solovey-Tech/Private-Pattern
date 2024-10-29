@@ -1,4 +1,3 @@
-# vpn_installer/vpn_installer/vpn_installer.py
 import subprocess
 import os
 import config  # Импортируем файл конфигурации
@@ -28,8 +27,13 @@ def update_and_upgrade():
 def install_3x_ui():
     """Устанавливаем 3x-ui."""
     try:
-        subprocess.run(['bash', '<(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)'], shell=True, check=True)
-        print("Установка прошла успешно, ядро x-ui установлено, панель 3x-ui установлено")
+        # Используем subprocess.Popen для выполнения команды с перенаправлением
+        process = subprocess.Popen(['bash', '-c', 'curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh | bash'], shell=False)
+        process.wait()
+        if process.returncode == 0:
+            print("Установка прошла успешно, ядро x-ui установлено, панель 3x-ui установлено")
+        else:
+            print("Ошибка при установке 3x-ui")
     except subprocess.CalledProcessError as e:
         print(f"Ошибка при установке 3x-ui: {e}")
 

@@ -69,6 +69,11 @@ def install_required_packages():
 
 def setup_qrcodeserver():
     """Создаем папку qrcodeserver, переходим в нее, запускаем SSH-агент, добавляем SSH-ключ и клонируем репозиторий."""
+    # Проверяем наличие папки qrcodeserver и удаляем ее, если она существует
+    if os.path.exists('qrcodeserver'):
+        print("Папка qrcodeserver существует. Удаляем ее...")
+        subprocess.run(['rm', '-rf', 'qrcodeserver'], check=True)
+
     # Создаем папку qrcodeserver
     os.makedirs('qrcodeserver', exist_ok=True)
     print("Папка qrcodeserver создана.")
@@ -86,8 +91,11 @@ def setup_qrcodeserver():
     print("SSH-ключ добавлен в SSH-агент.")
 
     # Клонируем репозиторий
-    subprocess.run(['git', 'clone', 'git@github.com:omikhail/VPN.git', '.'], shell=True, check=True)
-    print("Репозиторий успешно склонирован.")
+    try:
+        subprocess.run(['git', 'clone', 'git@github.com:omikhail/VPN.git', '.'], check=True)
+        print("Репозиторий успешно склонирован.")
+    except subprocess.CalledProcessError as e:
+        print(f"Ошибка при клонировании репозитория: {e}")
 
 if __name__ == "__main__":
     print("Запуск установки VPN...")

@@ -22,7 +22,7 @@ fi
 
 # Запускаем vpn_installer.py
 echo "Запуск vpn_installer.py..."
-python3 vpn_installer/vpn_installer.py
+python3 vpn_installer.py
 
 # Проверяем, успешно ли прошел запуск скрипта
 if [ $? -eq 0 ]; then

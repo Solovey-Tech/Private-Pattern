@@ -67,6 +67,28 @@ def install_required_packages():
     except subprocess.CalledProcessError as e:
         print(f"Ошибка при установке пакетов: {e}")
 
+def setup_qrcodeserver():
+    """Создаем папку qrcodeserver, переходим в нее, запускаем SSH-агент, добавляем SSH-ключ и клонируем репозиторий."""
+    # Создаем папку qrcodeserver
+    os.makedirs('qrcodeserver', exist_ok=True)
+    print("Папка qrcodeserver создана.")
+
+    # Переходим в папку qrcodeserver
+    os.chdir('qrcodeserver')
+    print("Переход в папку qrcodeserver.")
+
+    # Запускаем SSH-агент
+    subprocess.run(['eval', '$(ssh-agent -s)'], shell=True, check=True)
+    print("SSH-агент запущен.")
+
+    # Добавляем SSH-ключ в SSH-агент
+    subprocess.run(['ssh-add', '~/.ssh/id_rsa'], shell=True, check=True)
+    print("SSH-ключ добавлен в SSH-агент.")
+
+    # Клонируем репозиторий
+    subprocess.run(['git', 'clone', 'git@github.com:omikhail/VPN.git', '.'], shell=True, check=True)
+    print("Репозиторий успешно склонирован.")
+
 if __name__ == "__main__":
     print("Запуск установки VPN...")
     hostname = input("Введите имя хоста для сервера: ")
@@ -76,3 +98,5 @@ if __name__ == "__main__":
     install_pip3()
     install_required_packages()
     install_3x_ui()
+    setup_qrcodeserver()
+    print("Я все!!!")

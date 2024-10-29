@@ -126,4 +126,39 @@ sudo systemctl start avtoconfig.service
 echo "Включение службы avtoconfig.py для запуска при загрузке системы..."
 sudo systemctl enable avtoconfig.service
 
-echo "avtoconfig.py запущен как демон. Я все!!!"
+echo "avtoconfig.py запущен как демон."
+
+# Копируем скрипт api.py в папку /apipservicevpn/
+echo "Копирование скрипта api.py в папку /apipservicevpn/..."
+sudo mkdir -p /apipservicevpn
+sudo cp /qrcodeserver/api.py /apipservicevpn/
+
+# Запускаем api.py как демон с использованием systemctl
+echo "Создание службы для api.py..."
+sudo bash -c 'cat <<EOF > /etc/systemd/system/apipservicevpn.service
+[Unit]
+Description=api.py Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /apipservicevpn/api.py
+WorkingDirectory=/apipservicevpn
+User=root
+Group=root
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+
+echo "Перезагрузка демонов..."
+sudo systemctl daemon-reload
+
+echo "Запуск службы api.py..."
+sudo systemctl start apipservicevpn.service
+
+echo "Включение службы api.py для запуска при загрузке системы..."
+sudo systemctl enable apipservicevpn.service
+
+echo "api.py запущен как демон.."
+echo " Я все!!!"

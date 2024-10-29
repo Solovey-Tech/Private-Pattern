@@ -80,4 +80,4 @@ if __name__ == "__main__":
     install_pip3()
     install_required_packages()
     install_3x_ui()
-    print("Я все!!!")
+    

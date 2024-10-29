@@ -87,7 +87,7 @@ python3 vpn_installer.py
 
 # Проверяем, успешно ли прошел запуск скрипта
 if [ $? -eq 0 ]; then
-    echo "Я все!"
+    echo "Я все!!!"
 else
     echo "Ошибка при запуске vpn_installer.py."
     exit 1
